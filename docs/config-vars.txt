@@ -65,12 +65,18 @@ Use `heroku config`, `config:add`, `config:remove`, and `config:clear` to manage
       GITHUB_USERNAME => joesmith
     Restarting app...done.
 
+*Note*: heroku config:add does a config:clear first.   You have to
+ specify all config vars each time.  RACK_ENV is never cleared.
+
+
     $ heroku config
     GITHUB_USERNAME => joesmith
     RACK_ENV => production
 
     $ heroku config:clear
     Clearing all config vars and restarting app...done.
+
+*Note*: RACK_ENV is never cleared.
 
 RACK_ENV, RAILS_ENV, MERB_ENV
 -----------------------------
@@ -85,3 +91,13 @@ The RACK_ENV value is set to production by default.  You should rarely, if ever,
 Note: RAILS_ENV and MERB_ENV will automatically mirror whatever is in RACK_ENV.  Don't set RAILS_ENV or MERB_ENV directly.
 
 Note: It is not recommended that you ever set your RACK_ENV=development, as that will enable reloading and slow down your app's dyno significantly.
+
+Exception Reporting
+-------------------
+
+Note that if you are using an [external exception reporting
+service](http://docs.heroku.com/logs-exceptions), it will likely
+report to you your app's whole environment.   Since you are liekly
+using config vars to store private information, you should take care
+to prevent the exception reporting from showing this information.
+Your service will likely provide a means for this.
